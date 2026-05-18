@@ -1,0 +1,71 @@
+name: run-mjml-e2e-tests
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/run-mjml-e2e-tests.yml'
+  pull_request:
+    paths:
+      - '**.php'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/run-mjml-e2e-tests.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mjml-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [8.3, 8.4, 8.5]
+        laravel: [11.*, 12.*, 13.*]
+        include:
+          - laravel: 11.*
+            testbench: ^9.16
+          - laravel: 12.*
+            testbench: ^10.9
+          - laravel: 13.*
+            testbench: ^11.0
+        exclude:
+          - php: 8.5
+            laravel: 11.*
+
+    name: mjml-e2e P${{ matrix.php }} - L${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif, iconv, fileinfo
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install PHP dependencies
+        run: |
+          composer require --dev "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Run MJML E2E tests
+        run: composer test-mjml

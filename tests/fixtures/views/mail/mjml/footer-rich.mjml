@@ -1,0 +1,17 @@
+<mj-section>
+    <mj-column>
+        <mj-image
+            src="{{ asset('images/email-footer.png') }}"
+            alt="{{ config('app.name') }}" />
+    </mj-column>
+    <mj-column>
+        <mj-text font-size="14px">
+            {{ trans('mail.footer.team') }}
+        </mj-text>
+        <mj-text>
+            @if ($showSignature)
+                {{ $signature }}
+            @endif
+        </mj-text>
+    </mj-column>
+</mj-section>

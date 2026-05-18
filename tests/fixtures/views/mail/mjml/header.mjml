@@ -1,0 +1,6 @@
+<mj-section>
+    <mj-column>
+        <mj-text>{{ $headline }}</mj-text>
+        <mj-include path="snippet.mjml" />
+    </mj-column>
+</mj-section>

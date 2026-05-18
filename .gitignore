@@ -1,0 +1,16 @@
+/vendor/
+/node_modules/
+/.phpunit.cache/
+/build/
+composer.lock
+.phpunit.result.cache
+/vendor/pestphp/pest-plugin-mutate/.temp/
+
+# Compile cache (tests + Testbench default); wipe with: composer clean
+/tests/storage/*
+!/tests/storage/.gitignore
+/storage/
+
+# Stray MJML compile output at package root (misconfigured view.compiled)
+/*.html
+/*.mjml.php

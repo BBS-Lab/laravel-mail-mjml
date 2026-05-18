@@ -1,0 +1,3 @@
+<mj-head>
+    <mj-title>{{ $subject ?? config('app.name') }}</mj-title>
+</mj-head>
