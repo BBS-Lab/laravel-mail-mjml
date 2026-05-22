@@ -3,6 +3,6 @@
     "private": true,
     "description": "MJML CLI for package E2E tests only (not required in consuming apps).",
     "devDependencies": {
-        "mjml": "^4.15.3"
+        "mjml": "^5.2.2"
     }
 }
